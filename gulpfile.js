@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     sequence = require('run-sequence'),
     inject = require('gulp-inject'),
+    livereload = require('gulp-livereload'),
     uglify = require('gulp-uglify'),
     coffee = require('gulp-coffee'),
     concat = require('gulp-concat'),
@@ -68,7 +69,8 @@ gulp.task('private:build-html', function() {
     return gulp.src('src/index.html')
         .pipe(inject(sources, {ignorePath: 'dist/', addRootSlash: false}))
         .pipe(inject(styles, {ignorePath: 'dist/', addRootSlash: false}))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist'))
+        .pipe(livereload());
 });
 
 gulp.task('private:vendor-semantic', function() {
@@ -103,6 +105,10 @@ gulp.task('private:watch-css', function() {
     });
 });
 
+gulp.task('private:livereload-listen', function() {
+    livereload.listen();
+});
+
 gulp.task('default', function(done) {
     sequence(
         'private:clear',
@@ -115,6 +121,7 @@ gulp.task('default', function(done) {
         'private:build-html',
         [
             'private:run',
+            'private:livereload-listen',
             'private:watch-js',
             'private:watch-css',
             'private:watch-html'

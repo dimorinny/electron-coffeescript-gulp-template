@@ -1,2 +1,2 @@
 $ ->
-  alert('Hello Electron')
+  console.log("Hello World4")
